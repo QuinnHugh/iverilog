@@ -87,7 +87,8 @@ RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 
 ### Install iverilog and gtkwave
 RUN apt-get update &&\
-    apt-get install -y iverilog gtkwave
+    apt-get install -y iverilog gtkwave &&\
+    apt autoremove
 
 # Expose Tensorboard
 EXPOSE 6006
