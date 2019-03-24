@@ -1,9 +1,13 @@
-# This Dockerfile is used to build an ROS + VNC + Tensorflow image based on Ubuntu 18.04
+# This Dockerfile is used to build an iverilog image based on Ubuntu 18.04
 FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 
 LABEL maintainer "Henry Huang"
 MAINTAINER Henry Huang "https://github.com/henry2423"
-ENV REFRESHED_AT 2018-10-29
+ENV REFRESHED_AT 2018-10-29 \
+    DEBIAN_FRONTEND="noninteractive" \
+    LC_ALL="C.UTF-8" \
+    LANG="en_US.UTF-8" \
+    LANGUAGE="en_US.UTF-8"
 
 # Install sudo
 RUN apt-get update && \
@@ -12,8 +16,8 @@ RUN apt-get update && \
     curl
 
 # Configure user
-ARG user=ros
-ARG passwd=ros
+ARG user=kun
+ARG passwd=kun
 ARG uid=1000
 ARG gid=1000
 ENV USER=$user
@@ -81,49 +85,9 @@ ADD ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 
 
-### ROS and Gazebo Installation
-# Install other utilities
-RUN apt-get update && \
-    apt-get install -y vim \
-    tmux \
-    git \
-    cmake libfreeimage-dev libfreeimageplus-dev \
-    qt5-default freeglut3-dev libxi-dev libxmu-dev liblua5.2-dev \
-    lua5.2 doxygen graphviz graphviz-dev asciidoc
-
-# Install ROS
-RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list' && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116 && \
-    apt-get update && apt-get install -y ros-melodic-desktop && \
-    apt-get install -y python-rosinstall && \
-    rosdep init
-
-# Install Gazebo
-RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list' && \
-    wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add - && \
-    apt-get update && \
-    apt-get install -y gazebo9 libgazebo9-dev && \
-    apt-get install -y ros-melodic-gazebo-ros-pkgs ros-melodic-gazebo-ros-control
-
-# Install argos
-ADD ./argos3/ $HOME/argos3
-ADD ./argos3-examples/ $HOME/argos3-examples
-RUN cd $HOME/argos3 && \
-    mkdir build && cd build && \
-    cmake ../src && make && make doc && make install
-
-# Setup ROS & argos
-USER $USER
-RUN rosdep fix-permissions && rosdep update
-RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
-RUN echo $(awk 'NR==3' ~/argos3/build/setup_env.sh) >> ~/.bashrc && \
-    echo $(awk 'NR==5' ~/argos3/build/setup_env.sh) >> ~/.bashrc
-RUN /bin/bash -c "source ~/.bashrc"
-
-USER root
-RUN cd $HOME/argos3-examples && \
-    mkdir build && cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Debug .. && make 
+### Install iverilog and gtkwave
+RUN apt-get update &&\
+    apt-get install -y iverilog gtkwave
 
 # Expose Tensorboard
 EXPOSE 6006
