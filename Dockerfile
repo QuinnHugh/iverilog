@@ -1,5 +1,6 @@
 # This Dockerfile is used to build an iverilog image based on Ubuntu 18.04
-FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
+#FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
+FROM ubuntu:18.04
 
 LABEL maintainer "Henry Huang"
 MAINTAINER Henry Huang "https://github.com/henry2423"
