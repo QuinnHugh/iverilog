@@ -19,6 +19,3 @@ RUN mkdir ~/verilog
 
 ENTRYPOINT ["/startup.sh"]
 CMD ["output"]
-
-
-
