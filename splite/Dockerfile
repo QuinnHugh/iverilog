@@ -12,13 +12,13 @@ RUN apt-get update && \
     apt-get install -y iverilog && \
     apt-get autoremove -y
 
-ADD ./startup.sh ~ 
-RUN chmod a+x ~/startup.sh
+ADD ./startup.sh / 
+RUN chmod a+x /startup.sh
 
 RUN mkdir ~/verilog
 
-ENTRYPOINT ["~/startup.sh"]
-
+ENTRYPOINT ["/startup.sh"]
+CMD ["output"]
 
 
 

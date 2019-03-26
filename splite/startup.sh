@@ -5,6 +5,7 @@ set -e
 echo -e "\n------------------ startup of iverilog ------------------"
 
 cd ~/verilog
+
 echo -e "\n--------------------- compiling ---------------------"
 
 find ./ -name "*.v" -exec iverilog -o $1 {} +
