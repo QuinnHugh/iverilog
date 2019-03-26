@@ -6,6 +6,7 @@ echo -e "\n------------------ startup of iverilog ------------------"
 
 cd ~/verilog
 echo -e "\n--------------------- compiling ---------------------"
-iverilog -o $1 $2
+
+find ./ -name "*.v" -exec iverilog -o $1 {} +
 echo -e "\n------------------- generading the wave -------------------"
 vvp $1

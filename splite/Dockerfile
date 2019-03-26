@@ -13,7 +13,7 @@ RUN apt-get update && \
     apt-get autoremove -y
 
 ADD ./startup.sh ~ 
-RUN chmod +x ~/startup.sh
+RUN chmod a+x ~/startup.sh
 
 RUN mkdir ~/verilog
 
