@@ -9,5 +9,8 @@ cd ~/verilog
 echo -e "\n--------------------- compiling ---------------------"
 
 find ./ -name "*.v" -exec iverilog -o $1 {} +
+echo -e "compile completed"
+
 echo -e "\n------------------- generading the wave -------------------"
-vvp $1
+vvp ./$1
+echo -e "generation completed"
